@@ -182,7 +182,7 @@ results <- run_simu(
   lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var,
   gps_spec = 2, em_spec = 1,
   true_trt_effect_func = true_trt_effect_func, beta = beta,
-  sample_size = 20000, stopping.rule = TRUE, n_trials = 100,
+  sample_size = 20000, stopping.rule = TRUE, n_trials = 200,
   exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
   inference.sample_covs = matched.c$inference.sample_covs,
   matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -213,7 +213,7 @@ results <- run_simu(
   lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var,
   gps_spec = 2, em_spec = 2,
   true_trt_effect_func = true_trt_effect_func, beta = beta,
-  sample_size = 20000, stopping.rule = TRUE, n_trials = 100,
+  sample_size = 20000, stopping.rule = TRUE, n_trials = 200,
   exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
   inference.sample_covs = matched.c$inference.sample_covs,
   matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -244,7 +244,7 @@ results <- run_simu(
   lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var,
   gps_spec = 2, em_spec = 1,
   true_trt_effect_func = true_trt_effect_func, beta = beta,
-  sample_size = 20000, heterogenous_intercept = TRUE, stopping.rule = TRUE, n_trials = 100,
+  sample_size = 20000, heterogenous_intercept = TRUE, stopping.rule = TRUE, n_trials = 200,
   exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
   inference.sample_covs = matched.c$inference.sample_covs,
   matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -272,7 +272,7 @@ save(tree.data, file = paste0(dir_out, "selected.tree.data.with.stopping.setting
 # results <- run_simu(
 #   lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var, gps_spec = 2, em_spec = 2,
 #   true_trt_effect_func = true_trt_effect_func, beta = beta,
-#   sample_size = 20000, heterogenous_intercept = TRUE, stopping.rule = TRUE, n_trials = 100,
+#   sample_size = 20000, heterogenous_intercept = TRUE, stopping.rule = TRUE, n_trials = 200,
 #   exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
 #   inference.sample_covs = matched.c$inference.sample_covs,
 #   matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -297,7 +297,7 @@ true_trt_effect_func <- function(df) {
 results <- run_simu(
   lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var, gps_spec = 2, em_spec = 0,
   true_trt_effect_func = true_trt_effect_func, beta = beta,
-  sample_size = 20000, heterogenous_intercept = FALSE, stopping.rule = TRUE, n_trials = 100,
+  sample_size = 20000, heterogenous_intercept = FALSE, stopping.rule = TRUE, n_trials = 200,
   exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
   inference.sample_covs = matched.c$inference.sample_covs,
   matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -329,7 +329,7 @@ results <- run_simu(
   lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var,
   gps_spec = 3, em_spec = 1,
   true_trt_effect_func = true_trt_effect_func, beta = beta,
-  sample_size = 20000, stopping.rule = TRUE, n_trials = 100,
+  sample_size = 20000, stopping.rule = TRUE, n_trials = 200,
   exploration.sample_covs = matchedEM.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
   inference.sample_covs = matchedEM.c$inference.sample_covs,
   matched.exploration.sample = matchedEM.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -361,7 +361,7 @@ results <- run_simu(
   lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var,
   gps_spec = 2, em_spec = 3,
   true_trt_effect_func = true_trt_effect_func, beta = beta,
-  sample_size = 20000, stopping.rule = TRUE, n_trials = 100,
+  sample_size = 20000, stopping.rule = TRUE, n_trials = 200,
   exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
   inference.sample_covs = matched.c$inference.sample_covs,
   matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -373,65 +373,69 @@ tree.data <- results$results
 save(tree.data, file = paste0(dir_out, "selected.tree.data.with.stopping.setting7.RData"))
 
 # Plotting results for 1 and 6 (TESTING) ——————————————————————
-selected.tree.data.combined <- data.frame()
+# selected.tree.data.combined <- data.frame()
 
-for (i in c(1, 6)) {
-  load(file = paste0(dir_out, "selected.tree.data.with.stopping.setting", i, ".RData"))
-  selected.tree.data.combined <- selected.tree.data.combined %>% rbind(tree.data %>% cbind(setting = i))
-}
+# for (i in c(1, 6)) {
+#   load(file = paste0(dir_out, "selected.tree.data.with.stopping.setting", i, ".RData"))
+#   selected.tree.data.combined <- selected.tree.data.combined %>% rbind(tree.data %>% cbind(setting = i))
+# }
 
-setting.labs <- c("Setting 1", "Setting 6")
-names(setting.labs) <- c(1, 6)
+# setting.labs <- c("Setting 1", "Setting 6")
+# names(setting.labs) <- c(1, 6)
 
-selected.tree.data.combined %>%
-  filter(lambda == 1) %>%
-  tidyr::gather("metric", "value", c(bias, mse)) %>%
-  ggplot(aes(y = value, group = lambda)) +
-  geom_boxplot() +
-  facet_grid(rows = vars(metric), cols = vars(setting), labeller = labeller(setting = setting.labs), scales = "free_y") +
-  labs(y = NULL) +
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
-ggsave(file = paste0(dir_out, "mse.biase.with.stopping.no.c.1_6.png"))
+# selected.tree.data.combined %>%
+#   filter(lambda == 1) %>%
+#   tidyr::gather("metric", "value", c(bias, mse)) %>%
+#   ggplot(aes(y = value, group = lambda)) +
+#   geom_boxplot() +
+#   facet_grid(rows = vars(metric), cols = vars(setting), labeller = labeller(setting = setting.labs), scales = "free_y") +
+#   labs(y = NULL) +
+#   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+# ggsave(file = paste0(dir_out, "mse.biase.with.stopping.no.c.1_6.png"))
 
-selected.tree.data.combined %>%
-  group_by(beta) %>%
-  summarise_at(vars(selected.correct.splits), mean)
+# selected.tree.data.combined %>%
+#   group_by(beta) %>%
+#   summarise_at(vars(selected.correct.splits), mean)
 
 # Plotting setting 7 (for testing) ——————————————————————
-selected.tree.data.combined <- data.frame()
+# selected.tree.data.combined <- data.frame()
 
-for (i in c(7)) {
-  load(file = paste0(dir_out, "selected.tree.data.with.stopping.setting", i, ".RData"))
-  selected.tree.data.combined <- selected.tree.data.combined %>% rbind(tree.data %>% cbind(setting = i))
-}
+# for (i in c(7)) {
+#   load(file = paste0(dir_out, "selected.tree.data.with.stopping.setting", i, ".RData"))
+#   selected.tree.data.combined <- selected.tree.data.combined %>% rbind(tree.data %>% cbind(setting = i))
+# }
 
-setting.labs <- c("Setting 7")
-names(setting.labs) <- c(7)
+# setting.labs <- c("Setting 7")
+# names(setting.labs) <- c(7)
 
-selected.tree.data.combined %>%
-  filter(lambda == 1) %>%
-  tidyr::gather("metric", "value", c(bias, mse)) %>%
-  ggplot(aes(y = value, group = lambda)) +
-  geom_boxplot() +
-  facet_grid(rows = vars(metric), cols = vars(setting), labeller = labeller(setting = setting.labs), scales = "free_y") +
-  labs(y = NULL) +
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
-ggsave(file = paste0(dir_out, "mse.biase.with.stopping.no.c.7.png"))
+# selected.tree.data.combined %>%
+#   filter(lambda == 1) %>%
+#   tidyr::gather("metric", "value", c(bias, mse)) %>%
+#   ggplot(aes(y = value, group = lambda)) +
+#   geom_boxplot() +
+#   facet_grid(rows = vars(metric), cols = vars(setting), labeller = labeller(setting = setting.labs), scales = "free_y") +
+#   labs(y = NULL) +
+#   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+# ggsave(file = paste0(dir_out, "mse.biase.with.stopping.no.c.7.png"))
 
-selected.tree.data.combined %>%
-  group_by(beta) %>%
-  summarise_at(vars(selected.correct.splits), mean)
+# selected.tree.data.combined %>%
+#   group_by(beta) %>%
+#   summarise_at(vars(selected.correct.splits), mean)
 
-selected.tree.data.combined %>%
-  group_by(beta, lambda) %>%
-  summarise_at(vars(selected.correct.splits, bias, mse, selected.tree.size), mean)
+# selected.tree.data.combined %>%
+#   group_by(beta, lambda) %>%
+#   summarise_at(vars(selected.correct.splits, bias, mse, selected.tree.size), mean)
 
 # Combining results for various settings ——————————————————————
 selected.tree.data.combined <- data.frame()
 
-for (i in c(1, 2, 3, 5, 6, 7)) {
+paper <- c(5, 1, 2, 3, 7)
+supp <- c(5, 1, 2, 3, 7, 6)
+
+use <- supplementary
+for (i in 1:length(use)) {
   print(i)
-  load(file = paste0(dir_out, "selected.tree.data.with.stopping.setting", i, ".RData"))
+  load(file = paste0(dir_out, "selected.tree.data.with.stopping.setting", use[i], ".RData"))
   selected.tree.data.combined <- selected.tree.data.combined %>% rbind(tree.data %>% cbind(setting = i))
 }
 
@@ -454,12 +458,11 @@ result_summaries <- splicer(selected.tree.data.combined) %>%
 xtable(result_summaries)
 
 # Graph ———————————
-setting.labs <- c("Setting 1", "Setting 2", "Setting 3", "Setting 4", "Setting 5", "Setting 6", "Setting 7")
-names(setting.labs) <- c(1, 2, 3, 4, 5, 6, 7)
-selected.tree.data.combined %>%
-  # filter(lambda == 1) %>%
+setting.labs <- c("Setting 0", "Setting 1", "Setting 2", "Setting 3", "Setting 4", "Setting 5")
+names(setting.labs) <- c(1, 2, 3, 4, 5, 6)
+splicer(selected.tree.data.combined) %>%
   tidyr::gather("metric", "value", c(bias, mse)) %>%
-  ggplot(aes(y = value, group = lambda)) +
+  ggplot(aes(y = value)) +
   geom_boxplot() +
   facet_grid(rows = vars(metric), cols = vars(setting), labeller = labeller(setting = setting.labs), scales = "free_y") +
   labs(y = NULL) +
@@ -549,7 +552,7 @@ for (beta in betas) {
   results <- run_simu(
     lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var, gps_spec = 2, em_spec = 1,
     true_trt_effect_func = true_trt_effect_func, beta = beta,
-    sample_size = 20000, heterogenous_intercept = FALSE, stopping.rule = FALSE, n_trials = 100,
+    sample_size = 20000, heterogenous_intercept = FALSE, stopping.rule = FALSE, n_trials = 200,
     exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
     inference.sample_covs = matched.c$inference.sample_covs,
     matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -694,6 +697,7 @@ res <- selected.tree.data.combined %>%
 res
 
 # Generate sample tree images ———————————
+# @TODO: sample tree images
 for (b in betas) {
   for (l in lambdas) {
     x <- filter(selected.tree.data.combined, lambda == l & beta == b)$selected.trees[[1]]
@@ -728,7 +732,7 @@ for (beta in betas) {
     lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var,
     gps_spec = 2, em_spec = 2,
     true_trt_effect_func = true_trt_effect_func, beta = beta,
-    sample_size = 20000, stopping.rule = TRUE, n_trials = 50,
+    sample_size = 20000, stopping.rule = TRUE, n_trials = 200,
     exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
     inference.sample_covs = matched.c$inference.sample_covs,
     matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -860,7 +864,7 @@ for (beta in betas) {
     lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var,
     gps_spec = 2, em_spec = 1,
     true_trt_effect_func = true_trt_effect_func, beta = beta,
-    sample_size = 20000, heterogenous_intercept = TRUE, stopping.rule = TRUE, n_trials = 100,
+    sample_size = 20000, heterogenous_intercept = TRUE, stopping.rule = TRUE, n_trials = 200,
     exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
     inference.sample_covs = matched.c$inference.sample_covs,
     matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
@@ -993,7 +997,7 @@ for (beta in betas) {
     lambdas = lambdas, correct_splits = correct_splits, num_exposure_cats = 20, noise.var = noise.var,
     gps_spec = 2, em_spec = 3,
     true_trt_effect_func = true_trt_effect_func, beta = beta,
-    sample_size = 20000, stopping.rule = TRUE, n_trials = 50,
+    sample_size = 20000, stopping.rule = TRUE, n_trials = 200,
     exploration.sample_covs = matched.c$exploration.sample_covs, val.sample_covs = matched.c$val.sample_covs,
     inference.sample_covs = matched.c$inference.sample_covs,
     matched.exploration.sample = matched.c$matched.exploration.sample, matched.validation.sample = matched.c$matched.validation.sample,
