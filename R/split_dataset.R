@@ -13,6 +13,10 @@
 #' level into for stratification
 
 split_dataset <- function(data, num_exposure_cats) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> na/main
   a.vals <- seq(min(data$treat), max(data$treat), length.out = num_exposure_cats)
 
   data <-
@@ -23,9 +27,18 @@ split_dataset <- function(data, num_exposure_cats) {
   # split data into subsamples, stratifying on exposure level bins
   subsample.index <- caret::createFolds(as.factor(data$treat_level), list = TRUE, k = 3)
   data <- data %>%
+<<<<<<< HEAD
     mutate(subsample = ifelse(row_number() %in% subsample.index[[2]], "exploration",
       ifelse(row_number() %in% subsample.index[[3]], "validation", "inference")
     ))
 
   return(dplyr::select(data, -treat_level))
 }
+=======
+    mutate(subsample = ifelse(row_number() %in% subsample.index[[2]], 'exploration',
+                              ifelse(row_number() %in% subsample.index[[3]], 'validation', 'inference')))
+
+  return(dplyr::select(data, -treat_level))
+}
+
+>>>>>>> na/main

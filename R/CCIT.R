@@ -30,9 +30,15 @@ CCIT <- function(matched.exploration.sample.outcomes,
                  matched.inference.sample.outcomes,
                  lambdas,
                  stopping.rule) {
+<<<<<<< HEAD
   overall_effect <- lm(Y ~ treat + 1,
     data = matched.exploration.sample.outcomes
   )$coefficients["treat"]
+=======
+
+  overall_effect <- lm(Y ~ treat + 1,
+                       data = matched.exploration.sample.outcomes)$coefficients["treat"]
+>>>>>>> na/main
 
   parms.used <- list(
     treat = matched.exploration.sample.outcomes$treat,
@@ -40,11 +46,17 @@ CCIT <- function(matched.exploration.sample.outcomes,
     overall_effect = overall_effect
   )
   ulist.used <- define_u.list(stopping.rule = stopping.rule)
+<<<<<<< HEAD
   lists <- create.sequence(
     matched.exploration.sample.outcomes,
     ulist.used,
     parms.used
   )
+=======
+  lists <- create.sequence(matched.exploration.sample.outcomes,
+                           ulist.used,
+                           parms.used)
+>>>>>>> na/main
 
   tree.list <- lists[[1]]
   g.h.list <- lists[[2]]
@@ -52,10 +64,15 @@ CCIT <- function(matched.exploration.sample.outcomes,
     ifelse(is.null(t$splits), 0, nrow(t$splits))
   })
 
+<<<<<<< HEAD
   complex.vals <- evaluate.sequence(
     tree.list, matched.validation.sample.outcomes,
     matched.exploration.sample.outcomes, lambdas
   )
+=======
+  complex.vals <- evaluate.sequence(tree.list, matched.validation.sample.outcomes,
+                                    matched.exploration.sample.outcomes, lambdas)
+>>>>>>> na/main
 
   selected.tree.size <- complex.vals %>%
     group_by(lambda) %>%
@@ -86,6 +103,7 @@ CCIT <- function(matched.exploration.sample.outcomes,
         if (nrow(t$frame) == 1) {
           ind <- 1:nrow(matched.inference.sample.outcomes)
         } else {
+<<<<<<< HEAD
           rule_2 <- sapply(
             rule[[1]][-1],
             function(x) {
@@ -94,6 +112,11 @@ CCIT <- function(matched.exploration.sample.outcomes,
               )
             }
           )
+=======
+          rule_2 <- sapply(rule[[1]][-1],
+                           function(x) strsplit(x, "(?<=[><=])(?=[^><=])|(?<=[^><=])(?=[><=])",
+                                                perl = TRUE))
+>>>>>>> na/main
           splitting_vars <- sapply(rule_2, function(rule) {
             rule[1]
           })
@@ -105,8 +128,14 @@ CCIT <- function(matched.exploration.sample.outcomes,
           })
           ind <- sapply(seq(length(rule_2)), function(i) {
             get(comparison_operators[i])(matched.inference.sample.outcomes[, splitting_vars[i]],
+<<<<<<< HEAD
               comparison_vals[i])
           }) %>% apply(1, all)
+=======
+                                         comparison_vals[i])
+          }) %>% apply(1, all)
+
+>>>>>>> na/main
         }
         matched.inference.sample.new[ind, ]$subgroup <- n
       }
@@ -128,10 +157,17 @@ CCIT <- function(matched.exploration.sample.outcomes,
         right_join(df, by = "subgroup")
     }
   )
+<<<<<<< HEAD
   return(list(
     est.treatment.effects = est.treatment.effects,
     selected.trees = selected.trees,
     tree.list = tree.list,
     selected.tree.size = selected.tree.size
   ))
+=======
+  return(list(est.treatment.effects = est.treatment.effects,
+              selected.trees = selected.trees,
+              tree.list = tree.list,
+              selected.tree.size = selected.tree.size))
+>>>>>>> na/main
 }

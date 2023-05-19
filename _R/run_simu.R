@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #' @title
 #' Run simu
 #'
@@ -23,6 +24,10 @@
 #'
 #' @returns dataframe with one row for each tree in sequence and lambda value,
 #' representing the ability of the tree to explain the effect heterogeneity
+=======
+
+# wrapper function to simulate data, fit tree, and evaluate outcomes
+>>>>>>> na/main
 run_simu <- function(gps_spec = 1,
                      num_exposure_cats,
                      sample_size = 20000,
@@ -41,16 +46,26 @@ run_simu <- function(gps_spec = 1,
                      val.sample_covs = NULL,
                      matched.exploration.sample = NULL,
                      matched.validation.sample = NULL,
+<<<<<<< HEAD
                      matched.inference.sample = NULL,
                      true_modifiers = c(),
                      regenerate_covs = 0) {
   # If the matched covariate dataset (everything but the outcome) is not passed in, generate one
+=======
+                     matched.inference.sample = NULL) {
+
+  # if the matched covariate dataset (everything but the outcome) is not passed in, generate one
+>>>>>>> na/main
   if (is.null(matched.exploration.sample) | is.null(matched.validation.sample) | is.null(matched.inference.sample) |
     is.null(exploration.sample_covs) | is.null(val.sample_covs) | is.null(inference.sample_covs)) {
     # generate covariate data
     synth_data_covs <- generate_syn_data_covs(sample_size = sample_size, gps_spec = gps_spec)
 
+<<<<<<< HEAD
     # Discretize treatment values for gps matching
+=======
+    # discretize treatment values for gps matching
+>>>>>>> na/main
     a.vals <- seq(min(synth_data_covs$treat), max(synth_data_covs$treat), length.out = num_exposure_cats)
     delta_n <- a.vals[2] - a.vals[1]
 
@@ -59,9 +74,15 @@ run_simu <- function(gps_spec = 1,
       mutate(treat_level = cut(treat, breaks = a.vals)) %>%
       mutate_at(vars(em1, em2, em3, em4), as.factor)
 
+<<<<<<< HEAD
     # Split data into subsamples, stratifying on exposure level bins
     synth_data_covs <-
       split_dataset(data = synth_data_covs, num_exposure_cats = num_exposure_cats)
+=======
+    # split data into subsamples, stratifying on exposure level bins
+    synth_data_covs <-
+      split_dataset(data = synth_data_covs, exposure_bins = synth_data_covs$treat_level)
+>>>>>>> na/main
 
     exploration.sample_covs <-
       synth_data_covs %>%
@@ -81,20 +102,37 @@ run_simu <- function(gps_spec = 1,
     # GPS matching within subsamples and effect modifier groups
     matched.exploration.sample <-
       stratified_GPS_matching(exploration.sample_covs, delta_n,
+<<<<<<< HEAD
         exposure_name = "treat",
         confounders_names = c("cf1", "cf2", "cf3", "cf4", "cf5", "cf6"),
         names_of_strata_vars = c("em1", "em2", "em3", "em4"),
+=======
+        bin_seq = a.vals, exposure_name = "treat",
+        confounders_names = c("cf1", "cf2", "cf3", "cf4", "cf5", "cf6"),
+        em_names = c("em1", "em2", "em3", "em4"),
+>>>>>>> na/main
         outcome_name = NA
       ) %>%
       mutate(id = row_number()) %>%
       # rename(w = treat) %>%
       mutate_at(vars(em1, em2, em3, em4), as.factor)
+<<<<<<< HEAD
 
     matched.validation.sample <-
       stratified_GPS_matching(val.sample_covs, delta_n,
         exposure_name = "treat",
         confounders_names = c("cf1", "cf2", "cf3", "cf4", "cf5", "cf6"),
         names_of_strata_vars = c("em1", "em2", "em3", "em4"),
+=======
+    # print('here')
+    # print(names(matched.exploration.sample))
+
+    matched.validation.sample <-
+      stratified_GPS_matching(val.sample_covs, delta_n,
+        bin_seq = a.vals, exposure_name = "treat",
+        confounders_names = c("cf1", "cf2", "cf3", "cf4", "cf5", "cf6"),
+        em_names = c("em1", "em2", "em3", "em4"),
+>>>>>>> na/main
         outcome_name = NA
       ) %>%
       mutate(id = row_number()) %>%
@@ -103,9 +141,15 @@ run_simu <- function(gps_spec = 1,
 
     matched.inference.sample <-
       stratified_GPS_matching(inference.sample_covs, delta_n,
+<<<<<<< HEAD
         exposure_name = "treat",
         confounders_names = c("cf1", "cf2", "cf3", "cf4", "cf5", "cf6"),
         names_of_strata_vars = c("em1", "em2", "em3", "em4"),
+=======
+        bin_seq = a.vals, exposure_name = "treat",
+        confounders_names = c("cf1", "cf2", "cf3", "cf4", "cf5", "cf6"),
+        em_names = c("em1", "em2", "em3", "em4"),
+>>>>>>> na/main
         outcome_name = NA
       ) %>%
       mutate(id = row_number()) %>%
@@ -117,6 +161,7 @@ run_simu <- function(gps_spec = 1,
   if (n_trials > 0) {
     for (i in 1:n_trials) {
       # generate outcome data
+<<<<<<< HEAD
       exploration.sample_outcome <- generate_syn_data_outcome(
         cf = select(exploration.sample_covs, c(cf1, cf2, cf3, cf4, cf5, cf6)),
         em = select(exploration.sample_covs, c(em1, em2, em3, em4)),
@@ -147,10 +192,36 @@ run_simu <- function(gps_spec = 1,
         heterogenous_intercept = heterogenous_intercept,
         beta = beta
       ) %>% tibble::rowid_to_column()
+=======
+      exploration.sample_outcome <-
+        do.call(
+          generate_syn_data_outcome,
+          c(as.list(exploration.sample_covs %>% select(-treat_level, -subsample, -orig_id)), beta = beta, em_spec = em_spec, outcome_sd = outcome_sd, heterogenous_intercept = heterogenous_intercept)
+        ) %>%
+        tibble::rowid_to_column()
+
+      validation.sample_outcome <-
+        do.call(
+          generate_syn_data_outcome,
+          c(as.list(val.sample_covs %>% select(-treat_level, -subsample, -orig_id)), beta = beta, em_spec = em_spec, outcome_sd = outcome_sd, heterogenous_intercept = heterogenous_intercept)
+        ) %>%
+        tibble::rowid_to_column()
+
+      inference.sample_outcome <-
+        do.call(
+          generate_syn_data_outcome,
+          c(as.list(inference.sample_covs %>% select(-treat_level, -subsample, -orig_id)), beta = beta, em_spec = em_spec, outcome_sd = outcome_sd, heterogenous_intercept = heterogenous_intercept)
+        ) %>%
+        tibble::rowid_to_column()
+>>>>>>> na/main
 
       # add outcome data into matched samples
       matched.exploration.sample.outcomes <-
         matched.exploration.sample %>%
+<<<<<<< HEAD
+=======
+        select(-Y, -row_index) %>%
+>>>>>>> na/main
         left_join(exploration.sample_outcome, by = c(
           "orig_id" = "rowid", "cf1", "cf2", "cf3", "cf4", "cf5", "cf6", "em1", "em2", "em3", "em4",
           "treat"
@@ -158,20 +229,32 @@ run_simu <- function(gps_spec = 1,
 
       matched.validation.sample.outcomes <-
         matched.validation.sample %>%
+<<<<<<< HEAD
+=======
+        select(-Y, -row_index) %>%
+>>>>>>> na/main
         left_join(validation.sample_outcome, by = c(
           "orig_id" = "rowid", "cf1", "cf2", "cf3", "cf4", "cf5", "cf6", "em1", "em2", "em3", "em4",
           "treat"
         ))
       matched.inference.sample.outcomes <-
         matched.inference.sample %>%
+<<<<<<< HEAD
+=======
+        select(-Y, -row_index) %>%
+>>>>>>> na/main
         left_join(inference.sample_outcome, by = c(
           "orig_id" = "rowid", "cf1", "cf2", "cf3", "cf4", "cf5", "cf6", "em1", "em2", "em3", "em4",
           "treat"
         ))
 
       CCIT_results <- CCIT(
+<<<<<<< HEAD
         matched.exploration.sample.outcomes, matched.validation.sample.outcomes, matched.inference.sample.outcomes, lambdas, stopping.rule
       )
+=======
+        matched.exploration.sample.outcomes, matched.validation.sample.outcomes, matched.inference.sample.outcomes, lambdas, stopping.rule)
+>>>>>>> na/main
 
       est.treatment.effects <- CCIT_results$est.treatment.effects
 
@@ -191,25 +274,38 @@ run_simu <- function(gps_spec = 1,
         mean((est.treatment.effect$est - true_trt_effects$eff))
       })
 
+<<<<<<< HEAD
       variance <- sapply(est.treatment.effects, function(est.treatment.effect) {
         mean((est.treatment.effect$est - true_trt_effects$eff)^2) - mean((est.treatment.effect$est - true_trt_effects$eff))^2
       })
 
       # Whether selected trees have the correct splits
+=======
+      # TRUE if tree is exactly correct - CIT paper uses the correct number of splits, but shouldn't order effect the correct number??
+>>>>>>> na/main
       selected.correct.splits <- sapply(selected.trees, function(t) {
         list(row.names(t$splits)) %in% correct_splits
       })
 
+<<<<<<< HEAD
       # Whether one of the trees in the generated sequence is correct
+=======
+      # TRUE if one of the trees in the generated sequence is correct
+>>>>>>> na/main
       correct.tree.in.sequence <- any(sapply(tree.list, function(t) {
         list(row.names(t$splits)) %in% correct_splits
       }))
 
+<<<<<<< HEAD
       # Number of noise variables selected for all trees
+=======
+      # Number of noise variables selected
+>>>>>>> na/main
       numb.noise <- sapply(selected.trees, function(t) {
         sum(t$frame$var %in% noise.var)
       })
 
+<<<<<<< HEAD
       # Effect modifier true positives
       em.true.positives <- sapply(selected.trees, function(t) {
         length(intersect(list(row.names(t$splits))[[1]], correct_splits[[1]]))
@@ -328,10 +424,16 @@ run_simu <- function(gps_spec = 1,
         mutate(
           selected.trees = selected.trees,
           selected.tree.size = selected.tree.size$tree.size,
+=======
+      iter_results <-
+        selected.tree.size %>%
+        mutate(
+>>>>>>> na/main
           selected.correct.splits = selected.correct.splits,
           correct.tree.in.sequence = correct.tree.in.sequence,
           mse = mse,
           bias = bias,
+<<<<<<< HEAD
           variance = variance,
           numb.noise = numb.noise,
           em.true.positives = em.true.positives,
@@ -343,6 +445,11 @@ run_simu <- function(gps_spec = 1,
           iter = i
         )
 
+=======
+          numb.noise = numb.noise,
+          iter = i
+        )
+>>>>>>> na/main
       results <- rbind(results, iter_results)
     }
   }
